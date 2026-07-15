@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+/* ============================================================
+   NOIR — A House of Invisible Luxury
+   Design tokens. Restraint is the whole point.
+   ============================================================ */
+
+:root {
+  /* The void */
+  --noir: #050505;
+  --ink: #0a0a0c;
+  --graphite: #121214;
+
+  /* Light — the only real material.
+     These were pitched too low: secondary type sat at #6a6a6e on near-black,
+     which reads as haze, not restraint. Restraint is quiet, never murky. */
+  --ivory: #f7f5f0;
+  --ivory-dim: #dcd8cf;
+  --silver: #c4c7cd;   /* brushed silver */
+  --smoke: #9195a0;    /* smoky grey */
+  --smoke-dim: #5a5a62;
+
+  /* The single rare accent */
+  --champagne: #e3c489;
+  --champagne-soft: #f0dcb0;
+
+  /* Motion — heavy, graceful, intentional */
+  --ease-silk: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-drift: cubic-bezier(0.4, 0, 0.15, 1);
+
+  --fog: rgba(244, 241, 234, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--noir);
+  /* smooth scroll handled by Lenis */
+}
+
+body {
+  margin: 0;
+  background: var(--noir);
+  color: var(--ivory);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* MUST be `clip`, never `hidden`. Per the CSS overflow spec, if one axis is
+     not `visible` the other computes to `auto` — so `overflow-x: hidden` here
+     silently made <body> a scroll container. The page scrolls on <html>, so
+     body's scrollTop stayed 0 forever and IntersectionObserver clipped every
+     target below the first screen out of existence: every MediaSlot stayed at
+     clip-path inset(0 0 100%) and the images were invisible. `clip` is
+     spec-compatible with `visible` and creates no scroll container. */
+  overflow-x: clip;
+  cursor: none; /* replaced by the orb */
+}
+
+/* Hide the orb cursor luxury on touch / coarse pointers */
+@media (pointer: coarse) {
+  body { cursor: auto; }
+}
+
+::selection {
+  background: rgba(217, 183, 121, 0.22);
+  color: var(--ivory);
+}
+
+/* ---- Typographic architecture ---- */
+.font-serif { font-family: var(--font-serif), Georgia, serif; }
+.font-sans { font-family: var(--font-sans), system-ui, sans-serif; }
+
+/* A Didone is a display face. Set it big, set it tight, or don't set it.
+   Optical sizing + negative tracking is what separates "typeset" from "typed". */
+.display {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.022em;
+  font-optical-sizing: auto;
+}
+
+/* Hero scale — the type IS the architecture. */
+.display-xl {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  font-optical-sizing: auto;
+}
+
+/* The emotional register. A Didone italic is the whole reason to use one. */
+.display em,
+.display-xl em,
+.italic-accent {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.eyebrow {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 400;
+  font-size: 0.64rem;
+  letter-spacing: 0.46em;
+  text-transform: uppercase;
+  color: var(--smoke);
+}
+
+.lede {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--ivory-dim);
+}
+
+.accent { color: var(--champagne); }
+
+/* ---- Reveal primitive ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.5s var(--ease-silk), transform 1.5s var(--ease-silk);
+  will-change: opacity, transform;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Living light ----
+   The pockets of colour in the void drift on long, unequal cycles so they
+   never visibly loop. This is what stops the dark reading as flat paint. */
+.noir-drift-a { animation: noir-drift-a 34s ease-in-out infinite alternate; }
+.noir-drift-b { animation: noir-drift-b 46s ease-in-out infinite alternate; }
+.noir-drift-c { animation: noir-drift-c 58s ease-in-out infinite alternate; }
+@keyframes noir-drift-a {
+  from { transform: translate(-50%, -50%) scale(1) translate(0, 0); }
+  to   { transform: translate(-50%, -50%) scale(1.18) translate(3vw, -2vh); }
+}
+@keyframes noir-drift-b {
+  from { transform: translate(-50%, -50%) scale(1) translate(0, 0); }
+  to   { transform: translate(-50%, -50%) scale(1.3) translate(-4vw, 3vh); }
+}
+@keyframes noir-drift-c {
+  from { transform: translate(-50%, -50%) scale(1) translate(0, 0); }
+  to   { transform: translate(-50%, -50%) scale(1.24) translate(2vw, 4vh); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .noir-drift-a, .noir-drift-b, .noir-drift-c { animation: none; }
+}
+
+/* ---- Living stills ----
+   Slow enough that you never catch it moving; you only feel the room is warm.
+   Motion-via-stills: cheaper than video, and it never stutters. */
+.noir-breathe {
+  animation: noir-breathe 28s var(--ease-drift) infinite alternate;
+  transform-origin: 58% 45%;
+  will-change: transform;
+}
+@keyframes noir-breathe {
+  from { transform: scale(1.04); }
+  to   { transform: scale(1.16); }
+}
+
+/* A slow blade of light crossing a surface as it enters the frame. */
+.noir-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 35%,
+    rgba(232, 207, 159, 0.13) 50%,
+    transparent 65%
+  );
+  background-size: 300% 100%;
+  background-position: 130% 0;
+}
+.noir-sheen.is-in::after {
+  animation: noir-sheen 2.6s var(--ease-silk) 0.4s both;
+}
+@keyframes noir-sheen {
+  to { background-position: -130% 0; }
+}
+
+/* ---- Chapter scaffold ---- */
+.chapter {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+/* A faint champagne hairline used to separate breaths of the film */
+.hairline {
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(217, 183, 121, 0.4),
+    transparent
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition: opacity 0.6s ease; transform: none; }
+  .noir-breathe { animation: none; transform: scale(1.04); }
+  .noir-sheen.is-in::after { animation: none; }
+  * { scroll-behavior: auto; }
+}
