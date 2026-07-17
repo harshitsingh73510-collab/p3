@@ -56,12 +56,13 @@ export default function Collection() {
                 "linear-gradient(100deg, rgba(5,5,5,0.94) 0%, rgba(5,5,5,0.78) 32%, rgba(5,5,5,0.28) 62%, rgba(5,5,5,0.05) 100%)",
             }}
           />
-          {/* the void still owns the seams between rooms */}
+          {/* the void owns the seams between rooms — a long, soft dissolve so
+              one room melts into the next instead of ending on a hard line */}
           <div
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "linear-gradient(to bottom, #050505 0%, rgba(5,5,5,0) 18%, rgba(5,5,5,0) 82%, #050505 100%)",
+                "linear-gradient(to bottom, #050505 0%, rgba(5,5,5,0) 34%, rgba(5,5,5,0) 66%, #050505 100%)",
             }}
           />
           <div className="relative z-[2] mx-auto flex w-full max-w-6xl flex-col px-6">

@@ -16,32 +16,10 @@ const HOURS = [
 export default function Time() {
   return (
     <section id="time" className="chapter relative py-24">
-      {/* The chapter is about light, so the light is the chapter. One frame
-          holding morning and dusk at once — warm where it lands, cold where it
-          doesn't. It bleeds edge to edge and dissolves into the void. */}
-      <div className="pointer-events-none relative mb-24 w-full overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/media/time-light.webp"
-          alt="A shaft of light crossing an empty room"
-          className="noir-breathe h-[52vh] w-full object-cover"
-          style={{
-            maskImage:
-              "linear-gradient(to bottom, transparent, #000 22%, #000 72%, transparent 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to bottom, transparent, #000 22%, #000 72%, transparent 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to right, #050505 0%, rgba(5,5,5,0.1) 28%, rgba(5,5,5,0.1) 72%, #050505 100%)",
-          }}
-        />
-      </div>
-
-      <div className="mx-auto max-w-5xl px-6">
+      {/* No image here. This chapter is about light you never notice changing —
+          so it stays pure type over the Ether, whose colour temperature is
+          already drifting morning -> midnight beneath the words. */}
+      <div className="mx-auto max-w-5xl px-6 pt-16">
       <ChapterMark index="07" title="Time" />
 
       <Reveal>
