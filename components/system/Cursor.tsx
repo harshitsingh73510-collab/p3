@@ -1,17 +1,29 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * A tiny glowing orb moving through air. It lags the pointer (inertia), swells
  * over interactive matter, and dims to a hairline over type. No native cursor.
+ *
+ * Under prefers-reduced-motion this doesn't mount at all — a continuous
+ * rAF-lerp follow is exactly the kind of motion that flag exists to suppress,
+ * and globals.css hands the native cursor back (body { cursor: auto }) so
+ * removing this never leaves the user with no visible pointer at all.
  */
 export default function Cursor() {
   const orb = useRef<HTMLDivElement>(null);
   const halo = useRef<HTMLDivElement>(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setEnabled(!coarse && !reduced);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
 
     let x = window.innerWidth / 2;
     let y = window.innerHeight / 2;
@@ -58,7 +70,11 @@ export default function Cursor() {
       window.removeEventListener("pointermove", onMove);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [enabled]);
+
+  // Zero footprint under reduced motion / coarse pointers — not just an
+  // inert dot left sitting at screen centre.
+  if (!enabled) return null;
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[9999]">

@@ -1,4 +1,6 @@
+import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import ContactForm from "@/components/system/ContactForm";
 
 /**
  * Chapter 08 — The Last Memory.
@@ -62,8 +64,16 @@ export default function LastMemory() {
         </a>
       </Reveal>
 
+      {/* The one working capture the whole film has been leading to. Kept
+          small and quiet — a single field, not a marketing block — so it
+          reads as part of the close, not an interruption of it. */}
+      <Reveal delay={700} className="mt-20 w-full max-w-sm">
+        <p className="eyebrow mb-6">Before you go</p>
+        <ContactForm variant="waitlist" subject="NOIR — Homepage waitlist" />
+      </Reveal>
+
       <footer
-        className="mt-20 flex w-full max-w-6xl items-center justify-between border-t pt-8 text-[0.6rem] uppercase"
+        className="mt-20 flex w-full max-w-6xl flex-col items-center gap-6 border-t pt-8 text-[0.6rem] uppercase sm:flex-row sm:items-center sm:justify-between"
         style={{
           borderColor: "rgba(227,196,137,0.24)",
           letterSpacing: "0.3em",
@@ -71,6 +81,17 @@ export default function LastMemory() {
         }}
       >
         <span>NOIR — Grasse · Paris</span>
+        <nav aria-label="Site" className="flex items-center gap-8">
+          <Link href="/shop" data-hover style={{ color: "var(--smoke)" }}>
+            Shop
+          </Link>
+          <Link href="/about" data-hover style={{ color: "var(--smoke)" }}>
+            About
+          </Link>
+          <Link href="/contact" data-hover style={{ color: "var(--smoke)" }}>
+            Contact
+          </Link>
+        </nav>
         <span>Private enquiries by invitation</span>
       </footer>
 

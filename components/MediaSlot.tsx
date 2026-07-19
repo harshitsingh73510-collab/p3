@@ -34,6 +34,11 @@ export default function MediaSlot({
 
     let raf = 0;
     let done = false;
+    // Scroll parallax is a textbook prefers-reduced-motion trigger (WCAG
+    // 2.3.3). The visibility measurement below still has to run either way —
+    // it decides whether the image is shown at all — only the translateY term
+    // is suppressed.
+    const noMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Visibility is decided by measuring, NOT by IntersectionObserver.
     // An observer that never fires leaves the image clipped to nothing and the
@@ -50,6 +55,10 @@ export default function MediaSlot({
         setShown(true);
       }
 
+      if (noMotion) {
+        inner.current.style.transform = "none";
+        return;
+      }
       const mid = r.top + r.height / 2 - vh / 2;
       inner.current.style.transform = `translateY(${(mid / vh) * -22}px) scale(1.03)`;
     };

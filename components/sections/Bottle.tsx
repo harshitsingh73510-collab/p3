@@ -15,9 +15,13 @@ export default function Bottle() {
   const wrap = useRef<HTMLDivElement>(null);
   const glass = useRef<HTMLDivElement>(null);
 
-  // the object drifts a little against the pointer — weightless, suspended
+  // the object drifts a little against the pointer — weightless, suspended.
+  // Parallax-on-pointer is a textbook prefers-reduced-motion case; when it's
+  // set (or on touch, where the loop never ran anyway) the bottle just holds
+  // its static resting tilt from the inline style below.
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let raf = 0;
     let tx = 0;
     let ty = 0;

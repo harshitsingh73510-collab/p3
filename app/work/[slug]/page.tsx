@@ -6,6 +6,7 @@ import Reveal from "@/components/Reveal";
 import MediaSlot from "@/components/MediaSlot";
 import Cursor from "@/components/system/Cursor";
 import Grain from "@/components/system/Grain";
+import SubNav from "@/components/system/SubNav";
 
 export function generateStaticParams() {
   return FRAGRANCES.map((f) => ({ slug: f.slug }));
@@ -52,13 +53,14 @@ export default async function Room({
       <div className="pointer-events-none fixed inset-0 z-0" style={{ background: ROOM_TINT[f.atmosphere] }} />
       <Grain />
       <Cursor />
+      <SubNav />
 
       <div className="relative z-[2] mx-auto max-w-5xl px-6">
         {/* return */}
         <Link
           href="/#collection"
           data-hover
-          className="mt-10 inline-flex items-center gap-3 text-[0.62rem] uppercase"
+          className="mt-6 inline-flex items-center gap-3 text-[0.62rem] uppercase"
           style={{ letterSpacing: "0.36em", color: "var(--smoke)" }}
         >
           <span style={{ color: "var(--champagne)" }}>←</span> The Collection

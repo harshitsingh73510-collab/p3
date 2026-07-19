@@ -26,17 +26,40 @@ export default function Science() {
     const N = 26;
     const list: Node[] = [];
     for (let i = 0; i < N; i++) {
-      list.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        bx: Math.random() * W,
-        by: Math.random() * H,
-        r: 1.5 + Math.random() * 2.5,
-      });
+      const bx = Math.random() * W;
+      const by = Math.random() * H;
+      list.push({ x: bx, y: by, bx, by, r: 1.5 + Math.random() * 2.5 });
     }
     nodes.current = list;
 
     const svg = svgRef.current!;
+
+    // A continuous rAF loop is exactly the motion prefers-reduced-motion asks
+    // us to drop. Paint the constellation once, at rest, and stop — no
+    // pointer-reorganize animation, no infinite loop.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      list.forEach((n, i) => {
+        circles.current[i]?.setAttribute("cx", n.x.toFixed(1));
+        circles.current[i]?.setAttribute("cy", n.y.toFixed(1));
+      });
+      let li = 0;
+      for (let a = 0; a < list.length; a++) {
+        for (let b = a + 1; b < list.length; b++) {
+          const d = Math.hypot(list[a].x - list[b].x, list[a].y - list[b].y);
+          const ln = lines.current[li++];
+          if (!ln) continue;
+          if (d < 150) {
+            ln.setAttribute("x1", list[a].x.toFixed(1));
+            ln.setAttribute("y1", list[a].y.toFixed(1));
+            ln.setAttribute("x2", list[b].x.toFixed(1));
+            ln.setAttribute("y2", list[b].y.toFixed(1));
+            ln.setAttribute("opacity", (0.38 * (1 - d / 150)).toFixed(3));
+          }
+        }
+      }
+      return;
+    }
+
     const move = (e: PointerEvent) => {
       const rect = svg.getBoundingClientRect();
       pointer.current.x = ((e.clientX - rect.left) / rect.width) * W;

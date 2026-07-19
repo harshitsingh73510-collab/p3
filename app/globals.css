@@ -64,8 +64,32 @@ body {
   body { cursor: auto; }
 }
 
+/* The custom orb replaces the native cursor, so a fine, deliberate
+   :focus-visible ring is the ONLY way keyboard users ever see where they are
+   on a dark background — easy to forget on dark-theme sites, and there was
+   nothing here before this pass. Champagne, offset, never the browser blue
+   (which would fight the palette). Applies to every real interactive element,
+   not just links — inputs/buttons/textareas all need it too. */
+:focus-visible {
+  outline: 1.5px solid var(--champagne);
+  outline-offset: 4px;
+  border-radius: 1px;
+}
+a:focus-visible,
+button:focus-visible,
+[data-hover]:focus-visible {
+  outline-offset: 6px;
+}
+/* form fields sit on a bottom-border, not a box — a ring straddling that
+   border reads as broken, so give them a background glow instead */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 1px 0 0 var(--champagne);
+}
+
 ::selection {
-  background: rgba(217, 183, 121, 0.22);
+  background: rgba(227, 196, 137, 0.22);
   color: var(--ivory);
 }
 
@@ -200,7 +224,7 @@ body {
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(217, 183, 121, 0.4),
+    rgba(227, 196, 137, 0.4),
     transparent
   );
 }
@@ -209,5 +233,9 @@ body {
   .reveal { transition: opacity 0.6s ease; transform: none; }
   .noir-breathe { animation: none; transform: scale(1.04); }
   .noir-sheen.is-in::after { animation: none; }
+  /* the custom cursor is a continuous rAF-lerp follow — under reduced motion
+     Cursor.tsx doesn't mount its loop at all, so hand control back to the
+     native cursor rather than leaving a static, unusable dot on screen */
+  body { cursor: auto; }
   * { scroll-behavior: auto; }
 }
