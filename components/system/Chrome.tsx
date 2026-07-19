@@ -1,11 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 /**
- * The lightest possible chrome. No navigation bar. A wordmark that fades in
- * once you leave the First Breath, and a thin champagne thread on the right
- * edge tracking your descent through the film.
+ * The lightest possible chrome. Still no navigation BAR — but the new pages
+ * (/shop, /about, /contact) have to be reachable without scrolling the entire
+ * film to the footer. So: three small letterspaced words in the top-right
+ * corner, fading in once the First Breath has spoken, never touching the hero
+ * composition itself. Plus the wordmark that appears once you leave the hero,
+ * and the champagne thread tracking your descent.
  */
 export default function Chrome() {
   const mark = useRef<HTMLDivElement>(null);
@@ -35,8 +39,15 @@ export default function Chrome() {
     };
   }, []);
 
+  const nav: { href: string; label: string }[] = [
+    { href: "/shop", label: "Shop" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
+  ];
+
   return (
     <>
+      {/* wordmark — appears once past the hero, top-left */}
       <div
         ref={mark}
         className="fixed left-7 top-7 z-[70] text-sm"
@@ -49,6 +60,28 @@ export default function Chrome() {
       >
         NOIR
       </div>
+
+      {/* wayfinding — top-right, always present so the new pages are reachable
+          from the very first screen without scrolling the film to the footer.
+          Small, letterspaced, smoke-grey: discoverable, never loud. */}
+      <nav
+        aria-label="Site"
+        className="fixed right-7 top-7 z-[70] flex items-center gap-7 md:right-10"
+      >
+        {nav.map((l) => (
+          <Link
+            key={l.href}
+            href={l.href}
+            data-hover
+            className="noir-nav-link text-[0.6rem] uppercase"
+            style={{ letterSpacing: "0.34em", color: "var(--smoke)" }}
+          >
+            {l.label}
+          </Link>
+        ))}
+      </nav>
+
+      {/* descent thread — right edge */}
       <div className="fixed right-0 top-0 z-[70] h-full w-px" style={{ background: "rgba(255,255,255,0.04)" }}>
         <div
           ref={thread}
@@ -56,6 +89,11 @@ export default function Chrome() {
           style={{ background: "linear-gradient(var(--champagne-soft), var(--champagne))", transform: "scaleY(0)" }}
         />
       </div>
+
+      <style>{`
+        .noir-nav-link { transition: color 0.5s var(--ease-silk); }
+        .noir-nav-link:hover { color: var(--champagne); }
+      `}</style>
     </>
   );
 }
